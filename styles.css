@@ -1,0 +1,337 @@
+/* Reset & box-sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpul paginii simplu, fundal negru */
+body {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #fff;
+  text-align: center;
+}
+
+/* Containerul conținutului */
+.container {
+  text-align: center;
+  position: relative;
+}
+
+/* Titlu glitch mărit și accentuat */
+#glitch-text {
+  font-size: 4rem;              /* Mărit considerabil pentru mai mult impact */
+  text-transform: uppercase;
+  letter-spacing: 4px;          /* Lărgim spațiul dintre litere */
+  position: relative;
+  user-select: none;            /* Pentru a evita selectarea accidentală */
+}
+
+/* Login container */
+.login-container {
+  margin-top: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Formular */
+#login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#login-form input {
+  padding: 10px;
+  border: 2px solid #fff;
+  outline: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  background-color: #000;
+  color: #fff;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #000 inset !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* ---------------------------------------------- */
+/*  Buton Login Exclusivist cu linii animate      */
+/* ---------------------------------------------- */
+
+.login-button {
+  margin-top: 60px;
+  position: relative;
+  display: inline-block;
+  padding: 14px 36px;
+  /* Am făcut butonul ușor transparent, 
+     astfel încât liniile din pseudo-elementul ::after 
+     să fie vizibile prin fundal. */
+  background: rgba(17, 17, 17, 0.8);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden; /* important pentru elementele pseudo suprapuse */
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+  z-index: 1; /* creează un context de stacking */
+}
+
+/* ---------------------------------------------- */
+/*  1) Conturul animat (spinning border) - ::before  */
+/* ---------------------------------------------- */
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50px;
+  /* Gradient conic alb-gri, pentru efect lucios */
+  background: conic-gradient(
+    from 0deg,
+    #fff 0deg,
+    #ccc 90deg,
+    #999 180deg,
+    #ccc 270deg,
+    #fff 360deg
+  );
+  z-index: -2; /* sub .login-button, dar deasupra fundalului paginii */
+  animation: spin 3s linear infinite;
+  opacity: 0.2;
+  filter: brightness(2);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------- */
+/*  2) Liniile albe animate din interior - ::after   */
+/* ---------------------------------------------- */
+
+.login-button::after {
+  content: "";
+  position: absolute;
+  /* Lăsăm un mic spațiu față de marginea butonului,
+     ca să nu se suprapună peste conturul extern. */
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50px;
+  z-index: -1; /* în spatele conținutului butonului, dar peste conturul general */
+  
+  /* Creăm un fundal compus:
+     - un gradient repetitiv de linii albe 
+       (repeating-linear-gradient)
+     - se mișcă orizontal prin keyframe (linesMove)
+  */
+  background: 
+    repeating-linear-gradient(
+      90deg,              /* liniile sunt verticale, se repetă pe orizontală */
+      rgba(255, 255, 255, 0.15) 0px,
+      rgba(255, 255, 255, 0.15) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  
+  /* Dimensiunea "fâșiilor" la început. 
+     => 6px între rânduri (4px spațiu + 2px linia). */
+  background-size: 100% 8px;
+  
+  /* Animația care deplasează background-ul (liniile) pe orizontală,
+     pentru efectul de "mișcare" */
+  animation: linesMove 4s linear infinite;
+
+  /* Tranziție pe proprietatea "background-size" 
+     când vom face hover (liniile se "unesc") */
+  transition: background-size 0.4s ease;
+}
+
+/* Keyframes pentru liniile care "curg" orizontal (deplasăm background-position). */
+@keyframes linesMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    /* Deplasează liniile cu 80px la dreapta; 
+       ajustează după preferință viteza și distanța. */
+    background-position: 80px 0;
+  }
+}
+
+/* ---------------------------------------------- */
+/*  Efect la hover                                */
+/* ---------------------------------------------- */
+
+.login-button {
+  position: relative;
+  display: inline-block;
+  padding: 14px 36px;
+  background: #111;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+  z-index: 1;
+}
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50px;
+  background: conic-gradient(
+    from 0deg,
+    #fff 0deg,
+    #ccc 90deg,
+    #999 180deg,
+    #ccc 270deg,
+    #fff 360deg
+  );
+  z-index: -1;
+  animation: spin 3s linear infinite;
+  opacity: 0.2;
+  filter: brightness(2);
+}
+
+.login-button::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50px;
+  background: #000;
+  z-index: -1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.login-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+  background: #222;
+  color: #fff;
+}
+
+.login-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.login-button:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: none;
+}
+
+
+
+/* Container pentru mesaje */
+#message-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 40px;
+  margin-top: 55px;
+}
+
+.error-message,
+.success-message {
+  position: absolute;
+  text-align: center;
+  width: max-content;
+  min-width: 250px;
+  padding: 16px 24px;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s, transform 0.4s, box-shadow 0.4s;
+}
+
+/* Eroare */
+.error-message {
+  background: rgba(0, 0, 0, 0.85);
+  color: #ff3b3b;
+}
+.error-message.show {
+  opacity: 1;
+  visibility: visible;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+  animation: glitch-shadow 1s infinite alternate;
+}
+
+/* Succes */
+.success-message {
+  background: rgba(0, 0, 0, 0.85);
+  color: #32cd32;
+}
+.success-message.show {
+  opacity: 1;
+  visibility: visible;
+  box-shadow: 0 4px 15px rgba(50, 205, 50, 0.4);
+  animation: glitch-shadow-success 1s infinite alternate;
+}
+
+/* Animații glitch */
+@keyframes glitch-shadow {
+  0% { text-shadow: -2px 0 red, 2px 0 cyan; }
+  50% { text-shadow: -4px 0 red, 4px 0 cyan; }
+  100% { text-shadow: -2px 0 red, 2px 0 cyan; }
+}
+@keyframes glitch-shadow-success {
+  0% { text-shadow: -2px 0 lime, 2px 0 green; }
+  50% { text-shadow: -4px 0 lime, 4px 0 green; }
+  100% { text-shadow: -2px 0 lime, 2px 0 green; }
+}
